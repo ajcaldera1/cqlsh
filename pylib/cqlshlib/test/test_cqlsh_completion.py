@@ -821,3 +821,29 @@ class TestCqlshCompletion(CqlshCompletionCase):
 
     def test_complete_in_drop_index(self):
         pass
+
+    def test_complete_in_list(self):
+        # LIST ROLES [OF role] [NORECURSIVE]
+        self.trycompletions('LIST R', immediate='OLES ')
+        self.trycompletions('LIST ',
+                            choices=['ALL', 'ROLES', 'ALTER', 'AUTHORIZE', 'CREATE',
+                                     'DESCRIBE', 'DROP', 'MODIFY', 'SELECT'],
+                            other_choices_ok=True)
+        self.trycompletions('LIST ROLES ', choices=['OF', 'NORECURSIVE', ';'])
+        self.trycompletions('LIST ROLES O', immediate='F ')
+
+        # LIST permission [ON resource] [OF role] [NORECURSIVE]
+        self.trycompletions('LIST ALL P', immediate='ERMISSIONS ')
+        self.trycompletions('LIST ALL ', choices=['PERMISSIONS', 'ON', 'OF', 'NORECURSIVE', ';'])
+        self.trycompletions('LIST ALL PERMISSIONS ', choices=['ON', 'OF', 'NORECURSIVE', ';'])
+        self.trycompletions('LIST MODIFY P', immediate='ERMISSION ')
+        self.trycompletions('LIST SELECT ',
+                            choices=['PERMISSION', 'ON', 'OF', 'NORECURSIVE', ';'])
+        self.trycompletions('LIST SELECT PERMISSION ', choices=['ON', 'OF', 'NORECURSIVE', ';'])
+        self.trycompletions('LIST ALL ON ', choices=['ALL', 'KEYSPACE', 'TABLE', 'ROLE'],
+                            other_choices_ok=True)
+        self.trycompletions('LIST ALL ON ALL ', choices=['KEYSPACES', 'ROLES'],
+                            other_choices_ok=True)
+        self.trycompletions('LIST ALL ON ALL KEYSPACES ', choices=['OF', 'NORECURSIVE', ';'])
+        self.trycompletions('LIST ALL ON ALL KEYSPACES O', immediate='F ')
+        self.trycompletions('LIST DESCRIBE ON ALL ROLES ', choices=['OF', 'NORECURSIVE', ';'])
